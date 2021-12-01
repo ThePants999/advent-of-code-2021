@@ -1,0 +1,19 @@
+[package]
+name = "advent-of-code-2021"
+version = "0.0.1"
+authors = ["Chris Paterson <chris.paterson@microsoft.com>"]
+description = "My implementation of the Advent of Code 2021 in Rust"
+readme = "README.md"
+license-file = "LICENSE"
+repository = "https://github.com/ThePants999/advent-of-code-2021"
+keywords = ["advent of code","aoc","2021"]
+categories = ["command-line-utilities"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+itertools = "0.9"
+lazy_static = "1"
+strum = "0.20"
+strum_macros = "0.20"
