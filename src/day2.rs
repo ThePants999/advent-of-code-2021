@@ -60,7 +60,7 @@ struct Instruction {
 }
 
 impl Instruction {
-    fn parse_line(input_line: &String) -> Self {
+    fn parse_line(input_line: &str) -> Self {
         let pieces = input_line.split(' ').collect::<Vec<_>>();
         Self {
             direction: Direction::from_str(pieces[0]).expect("Direction could not be parsed from input"),
