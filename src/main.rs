@@ -1,9 +1,9 @@
-#[macro_use] extern crate lazy_static;
-#[macro_use] extern crate strum_macros;
+//#[macro_use] extern crate lazy_static;
+//#[macro_use] extern crate strum_macros;
 
 mod utils;
 mod day1;
-// mod day2;
+mod day2;
 // mod day3;
 // mod day4;
 // mod day5;
@@ -31,9 +31,9 @@ mod day1;
 use std::env;
 
 type DayFunction = fn(&[String]) -> (u64, u64);
-static DAY_FUNCTIONS: [DayFunction; 1] = [
+static DAY_FUNCTIONS: [DayFunction; 2] = [
     day1::day1,
-    // day2::day2,
+    day2::day2,
     // day3::day3,
     // day4::day4,
     // day5::day5,
@@ -78,7 +78,7 @@ fn main() {
         println!("Day {}", day);
         let input_lines = utils::load_inputs(day);
         let start_time = std::time::Instant::now();
-        let (part1, part2) = DAY_FUNCTIONS[day - 1](&input_lines);    
+        let (part1, part2) = DAY_FUNCTIONS[day - 1](&input_lines);
         let elapsed = start_time.elapsed().as_micros();
         println!("Part 1: {}\nPart 2: {}", part1, part2);
         println!("{}.{:03}ms", elapsed / 1000, elapsed % 1000);
