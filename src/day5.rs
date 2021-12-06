@@ -44,13 +44,13 @@ fn parse_line(line: &str, diagonals: bool) -> Vec<Position> {
     if start.x == end.x {
         if !diagonals {
             for y in cmp::min(start.y, end.y)..=cmp::max(start.y, end.y) {
-                positions.push(Position { x: start.x, y: y });
+                positions.push(Position { x: start.x, y });
             }
         }
     } else if start.y == end.y {
         if !diagonals {
             for x in cmp::min(start.x, end.x)..=cmp::max(start.x, end.x) {
-                positions.push(Position { x: x, y: start.y });
+                positions.push(Position { x, y: start.y });
             }
         }
     } else if diagonals {
