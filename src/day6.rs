@@ -16,10 +16,12 @@ pub fn day6(input_lines: &[String]) -> (u64, u64) {
 }
 
 fn simulate_day(fish_by_time: &mut [u64; 9]) {
-    let spawning_fish = fish_by_time[0];
-    for time in 0..8 {
-        fish_by_time[time] = fish_by_time[time + 1];
-    }
-    fish_by_time[8] = spawning_fish;
-    fish_by_time[6] += spawning_fish;
+    fish_by_time.rotate_left(1);
+    fish_by_time[6] += fish_by_time[8];
+    // let spawning_fish = fish_by_time[0];
+    // for time in 0..8 {
+    //     fish_by_time[time] = fish_by_time[time + 1];
+    // }
+    // fish_by_time[8] = spawning_fish;
+    // fish_by_time[6] += spawning_fish;
 }
