@@ -22,7 +22,33 @@ pub fn day9(input_lines: &[String]) -> (u64, u64) {
     for lp in low_points {
         let mut basin: HashSet<(usize, usize)> = HashSet::new();
         basin.insert((lp.row, lp.col));
-        explore_from_location(&heights, &mut basin, lp.row, lp.col);
+
+        let mut unexplored_locations: Vec<(usize, usize)> = vec![(lp.row, lp.col)];
+        while !unexplored_locations.is_empty() {
+            let (row, col) = unexplored_locations.pop().unwrap();
+
+            if row > 0 && !basin.contains(&(row-1, col)) && heights[row-1][col] != 9 {
+                let loc = (row-1, col);
+                basin.insert(loc);
+                unexplored_locations.push(loc);
+            }
+            if row < rows-1 && !basin.contains(&(row+1, col)) && heights[row+1][col] != 9 {
+                let loc = (row+1, col);
+                basin.insert(loc);
+                unexplored_locations.push(loc);
+            }
+            if col > 0 && !basin.contains(&(row, col-1)) && heights[row][col-1] != 9 {
+                let loc = (row, col-1);
+                basin.insert(loc);
+                unexplored_locations.push(loc);
+            }
+            if col < cols-1 && !basin.contains(&(row, col+1)) && heights[row][col+1] != 9 {
+                let loc = (row, col+1);
+                basin.insert(loc);
+                unexplored_locations.push(loc);
+            }
+        }
+
         basins.push(basin.len() as u64);
     }
     basins.sort_unstable();
@@ -41,27 +67,6 @@ fn parse_input(input_lines: &[String]) -> Vec<Vec<u64>> {
         heights_outer.push(heights_inner);
     }
     heights_outer
-}
-
-fn explore_from_location(heights: &[Vec<u64>], basin: &mut HashSet<(usize, usize)>, row: usize, col: usize) {
-    let rows = heights.len();
-    let cols = heights[0].len();
-    if row > 0 && !basin.contains(&(row-1, col)) && heights[row-1][col] != 9 {
-        basin.insert((row-1, col));
-        explore_from_location(heights, basin, row-1, col);
-    }
-    if row < rows-1 && !basin.contains(&(row+1, col)) && heights[row+1][col] != 9 {
-        basin.insert((row+1, col));
-        explore_from_location(heights, basin, row+1, col);
-    }
-    if col > 0 && !basin.contains(&(row, col-1)) && heights[row][col-1] != 9 {
-        basin.insert((row, col-1));
-        explore_from_location(heights, basin, row, col-1);
-    }
-    if col < cols-1 && !basin.contains(&(row, col+1)) && heights[row][col+1] != 9 {
-        basin.insert((row, col+1));
-        explore_from_location(heights, basin, row, col+1);
-    }
 }
 
 struct Position {
