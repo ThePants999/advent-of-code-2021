@@ -30,9 +30,9 @@ pub fn day10(input_lines: &[String]) -> (u64, u64) {
 
         if legal && !chunks.is_empty() {
             let mut incomplete_score = 0u64;
-            while !chunks.is_empty() {
+            while let Some(chunk) = chunks.pop() {
                 incomplete_score *= 5;
-                incomplete_score += match chunks.pop().unwrap() {
+                incomplete_score += match chunk {
                     ')' => 1,
                     ']' => 2,
                     '}' => 3,
