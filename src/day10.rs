@@ -32,11 +32,11 @@ pub fn day10(input_lines: &[String]) -> (u64, u64) {
             let mut incomplete_score = 0u64;
             while !chunks.is_empty() {
                 incomplete_score *= 5;
-                incomplete_score += match chunks.pop() {
-                    Some(')') => 1,
-                    Some(']') => 2,
-                    Some('}') => 3,
-                    Some('>') => 4,
+                incomplete_score += match chunks.pop().unwrap() {
+                    ')' => 1,
+                    ']' => 2,
+                    '}' => 3,
+                    '>' => 4,
                     _ => unreachable!(),
                 };
             }
