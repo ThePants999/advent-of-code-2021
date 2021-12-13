@@ -87,5 +87,5 @@ fn main() {
         println!("----------");
     }
     println!("**************");
-    println!("Cumulative total including reads: {}.{:03}ms", total_elapsed / 1000, total_elapsed % 1000);
+    println!("Cumulative total: {}.{:03}ms", total_elapsed / 1000, total_elapsed % 1000);
 }
