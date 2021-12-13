@@ -1,10 +1,10 @@
-use std::{collections::{HashSet, HashMap}, hash::Hash};
+use std::collections::HashMap;
 
 pub fn day12(input_lines: &[String]) -> (u64, u64) {
     let (caves, cave_dict) = parse_input(input_lines);
     let start = *cave_dict.get("start").unwrap();
-    let part1 = explore(&caves, start, false).len() as u64;
-    let part2 = explore(&caves, start, true).len() as u64;
+    let part1 = explore(&caves, start, false);
+    let part2 = explore(&caves, start, true);
     (part1,part2)
 }
 
@@ -36,28 +36,24 @@ fn parse_input<'a>(input_lines: &'a [String]) -> (Vec<Cave<'a>>, HashMap<&'a str
     (caves, cave_dict)
 }
 
-fn explore(caves: &[Cave], start_cave_index: usize, allow_duplicate_small_cave: bool) -> Vec<Path> {
-    let mut paths: Vec<Path> = Vec::new();
-    let mut paths_in_progress: Vec<Path> = Vec::new();
-    let mut paths_tried: HashSet<Path> = HashSet::new();
+fn explore(caves: &[Cave], start_cave_index: usize, allow_duplicate_small_cave: bool) -> u64 {
+    let mut num_paths = 0u64;
+    let mut paths_in_progress: Vec<Path> = vec![Path::new(&caves[start_cave_index])];
 
-    paths_in_progress.push(Path::new(&caves[start_cave_index]));
     while let Some(path) = paths_in_progress.pop() {
         let cave = &caves[*path.path.last().unwrap()];
         if cave.name == "end" {
-            paths.push(path);
+            num_paths += 1;
         } else {
             for connection in cave.connections.iter() {
                 if let Some(new_path) = Path::add(&path, &caves[*connection], allow_duplicate_small_cave) {
-                    if !paths_tried.contains(&new_path) {
-                        paths_tried.insert(new_path.clone());
-                        paths_in_progress.push(new_path);
-                    }
+                    paths_in_progress.push(new_path);
                 }
             }
         }
     }
-    paths
+
+    num_paths
 }
 
 struct Cave<'a> {
@@ -79,7 +75,7 @@ impl<'a> Cave<'a> {
     }
 }
 
-#[derive(Clone, PartialEq, Eq, Hash)]
+#[derive(Clone)]
 struct Path {
     path: Vec<usize>,
     small_caves: usize,
