@@ -43,7 +43,7 @@ fn parse_input(input_lines: &[String]) -> Vec<Cave> {
 fn explore(caves: &[Cave], allow_duplicate_small_cave: bool) -> u64 {
     let mut num_paths = 0u64;
     // Cave 0 is always the start
-    let mut paths_in_progress: Vec<Path> = vec![Path::new(&caves[0])];
+    let mut paths_in_progress: Vec<Path> = vec![Path::new()];
 
     while let Some(path) = paths_in_progress.pop() {
         let cave = &caves[path.current_position];
@@ -89,19 +89,17 @@ struct Path {
 }
 
 impl Path {
-    fn new(first_cave: &Cave) -> Self {
+    fn new() -> Self {
         Self {
-            current_position: first_cave.id,
+            // We ensure elsewhere that "start" is cave ID 0.
+            current_position: 0,
+            // You can't return to the start, so we don't need to record that you've visited it.
             small_caves_visited: 0,
             duplicate_small_cave: false,
         }
-        // We assume that the first cave is "start", which means we don't need to do any other
-        // processing like marking that we've visited a small cave (since you can't return to
-        // "start" anyway).
     }
 
     fn add(previous: &Self, next_step: &Cave, allow_duplicate_small_cave: bool) -> Option<Self> {
-        assert!(next_step.id != 0);
         let cave_is_small = next_step.small;
         let visited_small_cave_before = cave_is_small && (previous.small_caves_visited & (1 << next_step.id) != 0);
         if visited_small_cave_before && (!allow_duplicate_small_cave || previous.duplicate_small_cave) {
