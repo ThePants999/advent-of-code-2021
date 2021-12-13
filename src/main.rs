@@ -74,6 +74,7 @@ fn main() {
         max_day = min_day;
     }
 
+    let mut total_elapsed = 0u128;
     for day in min_day..=max_day {
         println!("Day {}", day);
         let input_lines = utils::load_inputs(day);
@@ -82,6 +83,9 @@ fn main() {
         let elapsed = start_time.elapsed().as_micros();
         println!("Part 1: {}\nPart 2: {}", part1, part2);
         println!("{}.{:03}ms", elapsed / 1000, elapsed % 1000);
+        total_elapsed += elapsed;
         println!("----------");
     }
+    println!("**************");
+    println!("Cumulative total including reads: {}.{:03}ms", total_elapsed / 1000, total_elapsed % 1000);
 }
