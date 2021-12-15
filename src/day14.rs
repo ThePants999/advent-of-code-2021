@@ -32,10 +32,8 @@ fn apply_step(polymer: HashMap<(char, char), u64>, rules: &[Rule]) -> HashMap<(c
 
     for rule in rules {
         let count = polymer.get(&rule.pair).unwrap_or(&0);
-        let new_count = new_polymer.entry(rule.result1).or_insert(0);
-        *new_count += count;
-        let new_count = new_polymer.entry(rule.result2).or_insert(0);
-        *new_count += count;
+        *new_polymer.entry(rule.result1).or_insert(0) += count;
+        *new_polymer.entry(rule.result2).or_insert(0) += count;
     }
 
     new_polymer
