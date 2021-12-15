@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet, BTreeSet};
+use std::collections::{HashMap, HashSet, BinaryHeap};
 
 pub fn day15(input_lines: &[String]) -> (u64, u64) {
     let mut cavern = parse_input(input_lines);
@@ -39,7 +39,7 @@ struct NodeDistance {
 struct Cavern {
     map: HashMap<(isize, isize), Node>,
     visited: HashSet<(isize, isize)>,
-    unvisited: BTreeSet<NodeDistance>,
+    heap: BinaryHeap<NodeDistance>,
     rows: isize,
     cols: isize,
 }
@@ -47,9 +47,9 @@ struct Cavern {
 impl Cavern {
     fn new(map: HashMap<(isize, isize), Node>, rows: isize, cols: isize) -> Self {
         let nodes = (rows * cols) as usize;
-        let mut cavern = Self { map, visited: HashSet::with_capacity(nodes), unvisited: BTreeSet::new(), rows, cols };
+        let mut cavern = Self { map, visited: HashSet::with_capacity(nodes), heap: BinaryHeap::with_capacity(nodes), rows, cols };
         let mut start = cavern.map.get_mut(&(0, 0)).unwrap();
-        cavern.unvisited.insert(NodeDistance { distance: 0, row: 0, col: 0 });
+        cavern.heap.push(NodeDistance { distance: 0, row: 0, col: 0 });
         start.distance = 0;
         cavern
     }
@@ -75,10 +75,10 @@ impl Cavern {
         let final_coords = (self.rows - 1, self.cols - 1);
 
         while !self.visited.contains(&final_coords) {
-            let next = self.unvisited.iter().next().unwrap();
-            let row = next.row;
-            let col = next.col;
-            self.visit(row, col);
+            let next = self.heap.pop().unwrap();
+            if !self.visited.contains(&(next.row, next.col)) {
+                self.visit(next.row, next.col);
+            }
         }
 
         self.map.get(&final_coords).unwrap().distance
@@ -92,7 +92,6 @@ impl Cavern {
         self.consider(row, col - 1, distance);
         self.consider(row, col + 1, distance);
 
-        self.unvisited.remove(&NodeDistance { distance, row, col });
         self.visited.insert((row, col));
     }
 
@@ -101,9 +100,8 @@ impl Cavern {
             let mut node = self.map.get_mut(&(row, col)).unwrap();
             let new_distance = from_distance + node.cost;
             if new_distance < node.distance {
-                self.unvisited.remove(&NodeDistance { distance: node.distance, row, col });
                 node.distance = new_distance;
-                self.unvisited.insert(NodeDistance { distance: new_distance, row, col });
+                self.heap.push(NodeDistance { distance: new_distance, row, col });
             }
         }
     }
