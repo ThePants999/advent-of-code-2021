@@ -29,11 +29,27 @@ struct Node {
     distance: u64,
 }
 
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
+#[derive(PartialEq, Eq)]
 struct NodeDistance {
     distance: u64,
     row: isize,
     col: isize,
+}
+
+impl Ord for NodeDistance {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        // The reason we're implementing this manually is
+        // because we need to compare the "wrong" way in
+        // order to get our BinaryHeap ordered by *lowest*
+        // cost.
+        other.distance.cmp(&self.distance).then_with(|| self.row.cmp(&other.row)).then_with(|| self.col.cmp(&other.col))
+    }
+}
+
+impl PartialOrd for NodeDistance {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
 }
 
 struct Cavern {
