@@ -4,13 +4,6 @@ pub fn day15(input_lines: &[String]) -> (u64, u64) {
     let mut cavern = parse_input(input_lines);
     let mut extended_cavern = cavern.extend();
 
-    for row in extended_cavern.map.iter() {
-        for node in row.iter() {
-            print!("{}", node.cost);
-        }
-        println!();
-    }
-
     let part1 = cavern.distance_top_left_to_bottom_right();
     let part2 = extended_cavern.distance_top_left_to_bottom_right();
 
